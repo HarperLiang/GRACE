@@ -1,0 +1,15 @@
+name: dstr
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu118
+      - torch==2.6.0+cu118
+      - numpy
+      - pandas
+      - openpyxl
+      - tqdm
+      - torchmetrics
+      - tensorboardX

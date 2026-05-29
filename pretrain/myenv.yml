@@ -1,0 +1,23 @@
+name: dino_lora
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      # PyTorch CUDA 12.1 build
+      - torch==2.5.1+cu121
+      - torchvision==0.20.1+cu121
+      - --extra-index-url https://download.pytorch.org/whl/cu121
+
+      # Core pretraining dependencies
+      - timm==1.0.24
+      - peft==0.16.0
+      - loralib>=0.1.2
+      - h5py==3.15.1
+      - numpy==2.2.6
+      - Pillow==12.1.0
+      - safetensors
+      - submitit>=1.5
