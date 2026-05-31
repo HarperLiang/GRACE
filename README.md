@@ -4,7 +4,7 @@
   <img src="assets/grace_overview.png" width="1000">
 </p>
 
-**GRACE** is a **gastric-specialized** pathology foundation model for morphology-driven precision pathology. GRACE is designed around the **gastric pathology workflow**, supporting slide-level decision-making from mucosal lesion diagnosis and tumor histological classification to molecular biomarker prescreening and survival-risk stratification. By extracting clinically actionable signals from routine H&E slides, GRACE provides a practical foundation for targeted patient stratification, workflow-aware diagnostic support, and deployable gastric pathology AI.
+**GRACE** is a **gastric-specialized** pathology foundation model for morphology-driven precision pathology. GRACE is designed around the **gastric pathology workflow**, supporting decision-making from mucosal lesion diagnosis and tumor histological classification to molecular biomarker prescreening and survival-risk stratification. By extracting clinically actionable signals from routine H&E slides, GRACE provides a practical foundation for targeted patient stratification, workflow-aware diagnostic support, and deployable gastric pathology AI.
 
 
 # 🔬 Demo
@@ -19,7 +19,7 @@ Model weights for reviewer evaluation can be accessed via [OneDrive](https://hku
 # 🌲 Repository Layout
 
 - `pretrain/`: DINO-style LoRA continual pretraining code based on Virchow2 checkpoint using gastric pathology patches stored in HDF5 (`.h5`) files.
-- `downstream_tasks/classification/`: ABMIL-based slide-level classification using pre-extracted `.pt` feature tensors.
+- `downstream_tasks/classification/`: ABMIL-based case-level classification using pre-extracted `.pt` feature tensors.
 - `downstream_tasks/survival/`: ABMIL-based survival prediction using pre-extracted `.pt` feature tensors.
 
 # 📊 Data Preparation
@@ -94,7 +94,7 @@ Expected files:
 
 The downstream code uses **ABMIL** on pre-extracted GRACE features. 
 
-- `downstream_tasks/classification/`: slide-level classification.
+- `downstream_tasks/classification/`: case-level classification.
 - `downstream_tasks/survival/`: survival prediction for OS or DFS.
 
 ## 1. Classification
@@ -144,7 +144,7 @@ python main.py \
 | `--study` | none | Study name used in the result directory. |
 | `--excel_file` | `None` | CSV or Excel label/split file. |
 | `--label_column` | `label` | Column used as the class label. |
-| `--batch_size` | `1` | Slide-level batch size. |
+| `--batch_size` | `1` | Batch size. |
 | `--num_epoch` | `30` | Maximum number of training epochs. |
 | `--lr` | `2e-4` | Learning rate. |
 | `--optimizer` | `Adam` | Optimizer. Choices are `SGD`, `Adam`, `AdamW`, `RAdam`, `PlainRAdam`, and `Lookahead`. |
@@ -173,7 +173,7 @@ Required columns after normalization:
 - `dataset`: dataset/source name. If absent, the code infers one from the feature root or label-table path.
 - `Fold 0` to `Fold 4`: fold assignment columns. If these are absent, a valid `split` column can be converted into fold columns.
 
-During loading, rows from the same case are aggregated into one case-level sample. For each case, event time, event status, dataset, and fold assignments must be consistent across its slides.
+During loading, rows from the same case are aggregated into one case-level sample. 
 
 ### Running Survival Prediction
 
@@ -196,7 +196,7 @@ python main.py \
 | `--excel_file` | required | CSV or Excel survival label/split file. |
 | `--output_dir` | `result` | Base output directory. Results are saved under `<output_dir>/<study>/<model>/<feature>/<timestamp>/`. |
 | `--modal` | `os` | Survival endpoint. Choices are `os` and `dfs`. |
-| `--batch_size` | `1` | Batch size. The current code requires `1` for variable-length slide bags. |
+| `--batch_size` | `1` | Batch size. |
 | `--num_epoch` | `50` | Maximum number of training epochs per fold. |
 | `--lr` | `1e-4` | Learning rate. |
 | `--patience` | `10` | Early-stopping patience based on holdout C-index. |
